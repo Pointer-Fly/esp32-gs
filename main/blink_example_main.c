@@ -85,6 +85,8 @@ int weight_Flag = 0;
 
 void message_deal(const char *topic, const char *data, const int topic_len, const int data_len);
 void report_weight_task(void *pvParameters);
+void servo_up();
+void servo_down();
 
 static void log_error_if_nonzero(const char *message, int error_code)
 {
@@ -159,7 +161,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
 static void mqtt_app_start(void)
 {
     esp_mqtt_client_config_t mqtt_cfg = {
-        .broker.address.uri = CONFIG_BROKER_URL,
+        .broker.address.uri = "mqtt://124.222.71.199",
     };
 
     esp_mqtt_client_handle_t client = esp_mqtt_client_init(&mqtt_cfg);
@@ -174,12 +176,18 @@ void message_deal(const char *topic, const char *data, const int topic_len, cons
     if (strncmp(topic, RECV_TOPIC, topic_len) == 0) {
         if (strncmp(data, "open", data_len) == 0) {
             servo_up();
+            ESP_LOGI(TAG, "open\r\n");
         } else if (strncmp(data, "close", data_len) == 0) {
             servo_down();
+            ESP_LOGI(TAG, "close\r\n");
         }else if(strncmp(data, "w+", data_len) == 0){
-            ESP_LOGI(TAG, "weight++");
+            weight_Thresold++;
+            ESP_LOGI(TAG, "重量阈值增加：");
+            ESP_LOGI(TAG, "%d\r\n", weight_Thresold);
         }else if(strncmp(data, "w-", data_len) == 0){
-            ESP_LOGI(TAG, "weight--");
+            weight_Thresold--;
+            ESP_LOGI(TAG, "重量阈值减少：");
+            ESP_LOGI(TAG, "%d\r\n", weight_Thresold);
         }
     }
 }
@@ -190,7 +198,7 @@ void report_weight_task(void *pvParameters)
     while (1) {
         vTaskDelay(5000 / portTICK_PERIOD_MS);
         char *weight_report = (char *)malloc(100);
-        sprintf(weight_report, "weight: %d", weight_real);
+        sprintf(weight_report, "weight: %ld", weight_real);
         esp_mqtt_client_publish(client, SEND_TOPIC, weight_report, 0, 0, 0);
         free(weight_report);
     }
@@ -360,7 +368,8 @@ void app_main(void)
         int b = gpio_get_level(18);
         if (b == 0)
         {
-            weight_Thresold--;
+            if(weight_Thresold > 0)
+                weight_Thresold--;
             printf("重量阈值减少：%u\r\n", weight_Thresold);
         }
 
