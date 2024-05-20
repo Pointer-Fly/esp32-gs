@@ -1,0 +1,9 @@
+CMake Error at D:/Embeded/ESP32/esp-idf-5.1.3/v5.1.3/esp-idf/tools/cmake/build.cmake:266 (message):
+  Failed to resolve component 'nghttp'.
+Call Stack (most recent call first):
+  D:/Embeded/ESP32/esp-idf-5.1.3/v5.1.3/esp-idf/tools/cmake/build.cmake:302 (__build_resolve_and_add_req)
+  D:/Embeded/ESP32/esp-idf-5.1.3/v5.1.3/esp-idf/tools/cmake/build.cmake:595 (__build_expand_requirements)
+  D:/Embeded/ESP32/esp-idf-5.1.3/v5.1.3/esp-idf/tools/cmake/project.cmake:547 (idf_build_process)
+  CMakeLists.txt:16 (project)
+
+

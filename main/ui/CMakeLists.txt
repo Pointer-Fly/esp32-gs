@@ -1,0 +1,17 @@
+SET(SOURCES components/ui_comp_small_label.c
+    components/ui_comp.c
+    screens/ui_Splash.c
+    screens/ui_Weather.c
+    ui.c
+    components/ui_comp_hook.c
+    ui_helpers.c
+    ui_events.c
+    images/ui_img_uav_png.c
+    images/ui_img_pattern_png.c
+    images/ui_img_logo1_png.c
+    fonts/ui_font_iconeco30.c
+    fonts/ui_font_iconfont22.c
+    fonts/ui_font_Number.c
+    fonts/ui_font_uavfont.c)
+
+add_library(ui ${SOURCES})
