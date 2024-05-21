@@ -1,3 +1,0 @@
-warning: the default selection REBOOT_RESET (undefined) of <choice BLINKER_RESET_TYPE> (defined at D:/Order/gs/components/Blinker/Kconfig.projbuild:215) is not contained in the choice
-Compiler supported targets: xtensa-esp32s3-elf
-

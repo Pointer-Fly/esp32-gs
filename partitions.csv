@@ -1,0 +1,2 @@
+nvs,      data, nvs,     0x9000,  0x1000,
+app0,     app,  ota_0,   0x10000, 0x13000,

@@ -168,7 +168,7 @@ static void mqtt_app_start(void)
     /* The last argument may be used to pass data to the event handler, in this example mqtt_event_handler */
     esp_mqtt_client_register_event(client, ESP_EVENT_ANY_ID, mqtt_event_handler, NULL);
     esp_mqtt_client_start(client);
-    xTaskCreate(report_weight_task, "report_weight_task", 4096, client, 10, NULL);
+    xTaskCreate(report_weight_task, "report_weight_task", 8192, client, 10, NULL);
 }
 
 void message_deal(const char *topic, const char *data, const int topic_len, const int data_len)
@@ -196,9 +196,11 @@ void report_weight_task(void *pvParameters)
 {
     esp_mqtt_client_handle_t client = (esp_mqtt_client_handle_t)pvParameters;
     while (1) {
-        vTaskDelay(5000 / portTICK_PERIOD_MS);
+        vTaskDelay(3000 / portTICK_PERIOD_MS);
         char *weight_report = (char *)malloc(100);
         sprintf(weight_report, "weight: %ld", weight_real);
+        esp_mqtt_client_publish(client, SEND_TOPIC, weight_report, 0, 0, 0);
+        sprintf(weight_report, "weightThreshold:%d", weight_Thresold);
         esp_mqtt_client_publish(client, SEND_TOPIC, weight_report, 0, 0, 0);
         free(weight_report);
     }
